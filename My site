@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashu | IT Support Pro Terminal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #0a0f1d;
+            color: #38bdf8;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .terminal-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+        .terminal-header {
+            background-color: #1e293b;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #334155;
+        }
+        .buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .btn-red { background-color: #ef4444; }
+        .btn-yellow { background-color: #eab308; }
+        .btn-green { background-color: #22c55e; }
+        .title {
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .terminal-body {
+            padding: 20px;
+            min-height: 500px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .banner {
+            color: #34d399;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+        .output-line {
+            margin-bottom: 12px;
+            color: #cbd5e1;
+        }
+        .command-entered {
+            color: #38bdf8;
+            font-weight: bold;
+        }
+        .input-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .prompt {
+            color: #34d399;
+            font-weight: bold;
+        }
+        input {
+            background: transparent;
+            border: none;
+            color: #f8fafc;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            width: 100%;
+            outline: none;
+        }
+        .highlight { color: #fbbf24; }
+        .success { color: #34d399; }
+        ul {
+            list-style: none;
+            padding-left: 15px;
+        }
+        ul li::before {
+            content: "⚡ ";
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="terminal-container">
+    <div class="terminal-header">
+        <div class="buttons">
+            <div class="btn btn-red"></div>
+            <div class="btn btn-yellow"></div>
+            <div class="btn btn-green"></div>
+        </div>
+        <div class="title">ashu@it-support-pro:~</div>
+        <div></div>
+    </div>
+    
+    <div class="terminal-body" id="terminalBody">
+        <div class="banner">
+██╗████████╗    ███████╗██╗   ██╗██████╗ ██████╗  ██████╗ ██████╗ ████████╗
+██║╚══████▀▀╝    ██╔════╝██║   ██║██╔══██╗██╔══██╗██╔═══██╗██╔══██╗╚══████▀▀╝
+██║   ██║       ███████╗██║   ██║██████╔╝██████╔╝██║   ██║██████╔╝   ██║   
+██║   ██║       ╚════██║██║   ██║██╔═══╝ ██╔═══╝ ██║   ██║██╔══██╗   ██║   
+██║   ██║       ███████║╚██████╔╝██║     ██║     ╚██████╔╝██║  ██║   ██║   
+╚═╝   ╚═╝       ╚══════╝ ╚═════╝ ╚═╝     ╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
+        </div>
+        <div class="output-line" style="color: #94a3b8;">
+            Welcome to Ashu's IT Infrastructure Terminal v2.0 (2026).<br>
+            Type <span class="highlight">'help'</span> to see the list of available commands and explore my profile.
+        </div>
+        <div id="history"></div>
+        
+        <div class="input-line">
+            <span class="prompt">ashu@it-pro:~$</span>
+            <input type="text" id="cmdInput" autofocus placeholder="type help..." autocomplete="off">
+        </div>
+    </div>
+</div>
+
+<script>
+    const cmdInput = document.getElementById('cmdInput');
+    const history = document.getElementById('history');
+    const terminalBody = document.getElementById('terminalBody');
+
+    const commands = {
+        help: `Available Commands:<br>
+               - <span class="highlight">about</span>      : Short introduction & career target<br>
+               - <span class="highlight">education</span>  : Academic degrees & technical courses<br>
+               - <span class="highlight">skills</span>     : Core IT Support & Systems infrastructure expertise<br>
+               - <span class="highlight">experience</span> : Pre-loaded hands-on professional history<br>
+               - <span class="highlight">clear</span>      : Clear the terminal screen`,
+        about: `<strong>[ABOUT ME]</strong><br>
+                Hi, I'm <span class="success">Ashu</span>. I am a tech-savvy L1 IT Support Engineer dedicated to maintaining high system uptime and resolving network issues. I specialize in troubleshooting hardware/software configurations, domain management, and automating helpdesk workflows.`,
+        education: `<strong>[EDUCATION & CERTIFICATIONS]</strong><br>
+                    • <span class="highlight">BCA (Bachelor of Computer Applications)</span> - Core computing foundational degree.<br>
+                    • <span class="highlight">ADCA</span> - Advanced Diploma in Computer Applications.<br>
+                    • <span class="highlight">Web Development Certification</span> - Expertise in HTTP, Client-Server architecture, and network diagnostics.`,
+        skills: `<strong>[TECHNICAL SKILLS]</strong><br>
+                 <ul>
+                    <li>Operating Systems: Windows 10/11 Desktop Support, Active Directory Management</li>
+                    <li>Networking Essentials: DNS, DHCP, IPv4 Addressing, TCP/IP Layer Diagnostics</li>
+                    <li>Command Line Utilities: Ping, Traceroute, Netstat, IPConfig Deployment</li>
+                    <li>Mail Client Systems: Microsoft Outlook Configuration (.PST/.OST Data Management)</li>
+                 </ul>`,
+        experience: `<strong>[PROFESSIONAL WORK HISTORY]</strong><br>
+                      • <span class="success">Coordinator at Seaga India Private Limited</span><br>
+                        Managed continuous system logs, resolved cross-departmental hardware/software faults, updated technical reporting infrastructures, and audited internal workstation compliance.`
+    };
+
+    cmdInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            const inputVal = cmdInput.value.trim().toLowerCase();
+            cmdInput.value = '';
+            
+            // Log the entered command
+            const cmdLine = document.createElement('div');
+            cmdLine.className = 'output-line';
+            cmdLine.innerHTML = `<span class="prompt">ashu@it-pro:~$</span> <span class="command-entered">${inputVal}</span>`;
+            history.appendChild(cmdLine);
+
+            if (inputVal === 'clear') {
+                history.innerHTML = '';
+            } else if (commands[inputVal]) {
+                const replyLine = document.createElement('div');
+                replyLine.className = 'output-line';
+                replyLine.innerHTML = commands[inputVal];
+                history.appendChild(replyLine);
+            } else if (inputVal !== '') {
+                const errorLine = document.createElement('div');
+                errorLine.className = 'output-line';
+                errorLine.innerHTML = `Command not found: <span style="color: #ef4444;">${inputVal}</span>. Type <span class="highlight">'help'</span> for valid commands.`;
+                history.appendChild(errorLine);
+            }
+            
+            // Auto scroll to bottom
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+    });
+
+    // Keep focus on input always
+    document.addEventListener('click', () => cmdInput.focus());
+</script>
+
+</body>
+</html>
